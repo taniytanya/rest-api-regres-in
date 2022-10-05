@@ -11,18 +11,19 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class RegresInTests extends TestData {
+public class RegresInTests {
+    TestData testData = new TestData();
 
     @DisplayName("Success register 200")
     @Test
     void registerTest() {
         JSONObject bodyRequest = new JSONObject();
-        bodyRequest.put("email", email);
-        bodyRequest.put("password", password);
+        bodyRequest.put("email", testData.email);
+        bodyRequest.put("password", testData.password);
 
         JSONObject expectedResponse = new JSONObject();
-        expectedResponse.put("id", id);
-        expectedResponse.put("token", token);
+        expectedResponse.put("id", testData.id);
+        expectedResponse.put("token", testData.token);
 
         Response extractResponse = given()
                 .log().uri()
@@ -30,7 +31,7 @@ public class RegresInTests extends TestData {
                 .contentType(JSON)
                 .body(bodyRequest.toString())
                 .when()
-                .post(basePath + register)
+                .post(testData.basePathEndpoint + testData.registerEndpoint)
                 .then()
                 .log().status()
                 .log().body()
@@ -49,7 +50,7 @@ public class RegresInTests extends TestData {
     @Test
     void negative415RegisterTest() {
         JSONObject bodyRequest = new JSONObject();
-        bodyRequest.put("email", email);
+        bodyRequest.put("email", testData.email);
 
         given()
                 .log().uri()
@@ -57,16 +58,16 @@ public class RegresInTests extends TestData {
                 .contentType(JSON)
                 .body(bodyRequest.toString())
                 .when()
-                .post(basePath + register)
+                .post(testData.basePathEndpoint + testData.registerEndpoint)
                 .then()
                 .log().status()
                 .log().body()
                 .statusCode(400)
-                .body("error",is(errorMessage));
+                .body("error",is(testData.errorMessage));
     }
 
 
-    @DisplayName("List user test 200")
+    @DisplayName("List user test 20")
     @Test
     void listUserTest() {
 
@@ -75,7 +76,7 @@ public class RegresInTests extends TestData {
                 .log().body()
                 .contentType(JSON)
                 .when()
-                .get(basePath + listUser)
+                .get(testData.basePathEndpoint + testData.listUserEndpoint)
                 .then()
                 .log().status()
                 .log().body()
@@ -83,12 +84,12 @@ public class RegresInTests extends TestData {
                 .body("total", is(12));
     }
 
-    @DisplayName("Successful login 200")
+    @DisplayName("Successful loginUserEndpoint 200")
     @Test
     void loginTest() {
         JSONObject bodyRequest = new JSONObject();
-        bodyRequest.put("email", emailLogin);
-        bodyRequest.put("password", passwordLogin);
+        bodyRequest.put("email", testData.emailLogin);
+        bodyRequest.put("password", testData.passwordLogin);
 
         given()
                 .log().uri()
@@ -96,7 +97,7 @@ public class RegresInTests extends TestData {
                 .contentType(JSON)
                 .body(bodyRequest.toString())
                 .when()
-                .post(basePath + login)
+                .post(testData.basePathEndpoint + testData.loginUserEndpoint)
                 .then()
                 .log().status()
                 .log().body()
@@ -114,7 +115,7 @@ public class RegresInTests extends TestData {
                 .log().uri()
                 .log().body()
                 .when()
-                .put(basePath + updateUser)
+                .put(testData.basePathEndpoint + testData.updateUserEndpont)
                 .then()
                 .log().status()
                 .log().body()
